@@ -9,8 +9,7 @@ my_tags=$(tags QuinnWilton/beamup)
 otp_tags=$(
   tags erlang/otp | \
     # OTP 23.2.6+, 23.3+, or 24
-    grep -e OTP-23.2 -e OTP-23.3 -e OTP-24 | \
-    grep -E -v -e "OTP-23.2$" -e "OTP-23.2.[1-5]"
+    grep -e OTP-23.2 -e OTP-23.3 -e OTP-24
 )
 
 for i in $otp_tags; do
@@ -19,6 +18,6 @@ for i in $otp_tags; do
   else
     echo "syncing $i"
     gh api -XPOST repos/QuinnWilton/beamup/actions/workflows/build_otp.yml/dispatches \
-      --input <(echo '{"ref":"master","inputs":{"version":"'${i/OTP-/}'"}}')
+      --input <(echo '{"ref":"main","inputs":{"version":"'${i/OTP-/}'"}}')
   fi
 done
