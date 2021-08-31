@@ -1,5 +1,7 @@
 ## beamup
 
+This is forked from [wojtekmach/beamup](https://github.com/wojtekmach/beamup) -- we had to re-push it ourselves becauase GitHub actions don't work very well with forked repos.
+
 A proof-of-concept BEAM installer.
 
 ## Components
