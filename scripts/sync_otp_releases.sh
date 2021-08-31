@@ -5,7 +5,7 @@ tags() {
   gh api repos/$repo/releases --paginate | jq -r '.[].tag_name'
 }
 
-my_tags=$(tags QuinnWilton/otp_releases)
+my_tags=$(tags QuinnWilton/beamup)
 otp_tags=$(
   tags erlang/otp | \
     # OTP 23.2.6+, 23.3+, or 24
