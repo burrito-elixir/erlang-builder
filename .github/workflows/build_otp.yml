@@ -17,9 +17,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - id: check-release
-        name: Check wojtekmach/otp_releases 
+        name: Check QuinnWilton/otp_releases 
         run: |
-          if gh api -XHEAD repos/wojtekmach/otp_releases/releases/tags/OTP-${{ github.event.inputs.version }}; then 
+          if gh api -XHEAD repos/QuinnWilton/otp_releases/releases/tags/OTP-${{ github.event.inputs.version }}; then 
             echo ::set-output name=exists::$(echo true)
           else
             echo ::set-output name=exists::$(echo false)
@@ -33,7 +33,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
         with:
-          owner: wojtekmach
+          owner: QuinnWilton
           repo: otp_releases
           commitish: main
           tag_name: OTP-${{ github.event.inputs.version }}
@@ -57,8 +57,8 @@ jobs:
     - id: asset-exists
       name: Check if release asset exists
       run: |
-        release_id=$(gh api repos/wojtekmach/otp_releases/releases/tags/OTP-${{ github.event.inputs.version }} | jq .id)
-        if gh api repos/wojtekmach/otp_releases/releases/${release_id}/assets | jq -r '.[].name' | grep ${{ steps.release-name.outputs.name }}; then
+        release_id=$(gh api repos/QuinnWilton/otp_releases/releases/tags/OTP-${{ github.event.inputs.version }} | jq .id)
+        if gh api repos/QuinnWilton/otp_releases/releases/${release_id}/assets | jq -r '.[].name' | grep ${{ steps.release-name.outputs.name }}; then
           echo ::set-output name=exists::$(echo true)
         else
           echo ::set-output name=exists::$(echo false)
@@ -72,7 +72,7 @@ jobs:
     # - run: mkdir -p tmp/beamup && cd tmp/beamup && mkdir -p ${{ steps.release-name.outputs.name }} && tar czf ${{ steps.release-name.outputs.name }}.tar.gz ${{ steps.release-name.outputs.name }}
     #   if: ${{ steps.asset-exists.outputs.exists == 'false' }}
 
-    - run: gh release upload -R wojtekmach/otp_releases OTP-${{ github.event.inputs.version }} tmp/beamup/${{ steps.release-name.outputs.name }}.tar.gz
+    - run: gh release upload -R QuinnWilton/otp_releases OTP-${{ github.event.inputs.version }} tmp/beamup/${{ steps.release-name.outputs.name }}.tar.gz
       name: Upload asset
       env:
         GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}

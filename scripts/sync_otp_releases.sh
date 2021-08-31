@@ -5,7 +5,7 @@ tags() {
   gh api repos/$repo/releases --paginate | jq -r '.[].tag_name'
 }
 
-my_tags=$(tags wojtekmach/otp_releases)
+my_tags=$(tags QuinnWilton/otp_releases)
 otp_tags=$(
   tags erlang/otp | \
     # OTP 23.2.6+, 23.3+, or 24
@@ -18,7 +18,7 @@ for i in $otp_tags; do
     echo release $i already exists
   else
     echo "syncing $i"
-    gh api -XPOST repos/wojtekmach/beamup/actions/workflows/build_otp.yml/dispatches \
+    gh api -XPOST repos/QuinnWilton/beamup/actions/workflows/build_otp.yml/dispatches \
       --input <(echo '{"ref":"master","inputs":{"version":"'${i/OTP-/}'"}}')
   fi
 done
