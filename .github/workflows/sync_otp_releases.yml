@@ -11,4 +11,4 @@ jobs:
       - uses: actions/checkout@v2
       - run: ./scripts/sync_otp_releases.sh
         env:
-          GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
