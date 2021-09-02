@@ -13,7 +13,17 @@ OpenSSL_DIR="$HOME/openssl_prefix"
 mkdir -p $OpenSSL_DIR
 mkdir -p $TMPDIR
 
-OTP_BUILD_FLAGS="--without-jinterface --without-hipe --disable-dynamic-ssl-lib --with-ssl=$OpenSSL_DIR"
+# Workaround for drawin compiler flags on some builds of OTP
+if [[ $(uname -s) == Darwin ]]
+then
+    echo "Setting MacOS workaround variables..."
+    export EGREP=egrep
+    export CC=clang
+    export CPP="clang -E"
+fi
+
+# --disable-parallel-configure is to get around a bug in autoconf for MacOS...
+OTP_BUILD_FLAGS="--disable-parallel-configure --without-jinterface --without-hipe --disable-dynamic-ssl-lib --with-ssl=$OpenSSL_DIR"
 
 echo "building OpenSSL $OpenSSL_VERSION"
 curl https://www.openssl.org/source/openssl-$OpenSSL_VERSION.tar.gz -O && \
