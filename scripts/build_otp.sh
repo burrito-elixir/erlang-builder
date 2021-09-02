@@ -9,15 +9,15 @@ if [ -z "${version}" ]; then
 fi
 
 OpenSSL_VERSION="1.1.1l"
-OTP_BUILD_FLAGS="--without-jinterface --without-hipe --with-ssl=./openssl-$OpenSSL_VERSION --disable-dynamic-ssl-lib"
-
+OTP_BUILD_FLAGS="--without-jinterface --without-hipe --with-ssl=$HOME/work/beamup/beamup/openssl-$OpenSSL_VERSION --disable-dynamic-ssl-lib"
+echo $HOME
 echo "building OpenSSL $OpenSSL_VERSION"
 curl https://www.openssl.org/source/openssl-$OpenSSL_VERSION.tar.gz -O && \
     tar -xzf openssl-$OpenSSL_VERSION.tar.gz && \
     cd openssl-$OpenSSL_VERSION && ./config && make depend && make && \
-    mkdir -p ./openssl-$OpenSSL_VERSION/lib && \
-    cp -r ./openssl-$OpenSSL_VERSION/libc* ./openssl-$OpenSSL_VERSION/lib/ && \
-    cp -r ./openssl-$OpenSSL_VERSION/libs* ./openssl-$OpenSSL_VERSION/lib/
+    mkdir -p $HOME/work/beamup/beamup/openssl-$OpenSSL_VERSION/lib && \
+    cp -r $HOME/work/beamup/beamup/openssl-$OpenSSL_VERSION/libc* $HOME/work/beamup/beamup/openssl-$OpenSSL_VERSION/lib/ && \
+    cp -r $HOME/work/beamup/beamup/openssl-$OpenSSL_VERSION/libs* $HOME/work/beamup/beamup/openssl-$OpenSSL_VERSION/lib/
 
 echo "building OTP ${version}"
 
