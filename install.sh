@@ -44,7 +44,7 @@ main() {
 install_otp() {
   version=$1
   release=otp-${version}-$(uname -sm | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
-  url=https://github.com/QuinnWilton/beamup/releases/download/OTP-$version/$release.tar.gz
+  url=https://github.com/burrito-elixir/erlang-builder/releases/download/OTP-$version/$release.tar.gz
   echo ">> downloading $url"
   curl --fail -LO $url
   tar xzf $release.tar.gz

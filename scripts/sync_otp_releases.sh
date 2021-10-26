@@ -5,7 +5,7 @@ tags() {
   gh api repos/$repo/releases --paginate | jq -r '.[].tag_name'
 }
 
-my_tags=$(tags QuinnWilton/beamup)
+my_tags=$(tags burrito-elixir/erlang-builder)
 otp_tags=$(
   tags erlang/otp | \
     # OTP 23.2+, 23.3+, or 24
@@ -17,6 +17,6 @@ for i in $otp_tags; do
     echo release $i already exists
   else
     echo "Kicking off build for $i"
-    gh workflow run -R "QuinnWilton/beamup" build_otp.yml -f version=${i/OTP-/}
+    gh workflow run -R "burrito-elixir/erlang-builder" build_otp.yml -f version=${i/OTP-/}
   fi
 done
