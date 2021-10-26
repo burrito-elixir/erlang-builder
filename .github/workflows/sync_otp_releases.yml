@@ -11,7 +11,7 @@ on:
 jobs:
   sync_otp_releases:
     name: Sync OTP releases
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
       - run: ./scripts/sync_otp_releases.sh
