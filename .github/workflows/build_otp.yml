@@ -40,6 +40,44 @@ jobs:
           prerelease: ${{ contains(github.event.inputs.version, 'rc') }}
         if: ${{ steps.check-release.outputs.exists == 'false' }}
 
+  build-musl:
+    needs: [ensure_release]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-18.04]
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set release name
+      id: release-name
+      run: echo ::set-output name=name::otp-${{ github.event.inputs.version }}-$(uname -sm | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+
+    - id: asset-exists
+      name: Check if release asset exists
+      run: |
+        release_id=$(gh api repos/burrito-elixir/erlang-builder/releases/tags/OTP-${{ github.event.inputs.version }} | jq .id)
+        if gh api repos/burrito-elixir/erlang-builder/releases/${release_id}/assets | jq -r '.[].name' | grep ${{ steps.release-name.outputs.name }}_musl_libc; then
+          echo ::set-output name=exists::$(echo true)
+        else
+          echo ::set-output name=exists::$(echo false)
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - run: |
+        docker build --build-arg version="${{ github.event.inputs.version }}" . -f alpine.Dockerfile -t build-otp-alpine
+        docker cp $(docker create build-otp-alpine):/tmp/beamup/beamup/${{ steps.release-name.outputs.name }}.tar.gz ./${{ steps.release-name.outputs.name }}.tar.gz
+        cp ${{ steps.release-name.outputs.name }}.tar.gz ${{ steps.release-name.outputs.name }}_musl_libc.tar.gz
+      if: ${{ steps.asset-exists.outputs.exists == 'false' }}
+
+    - run: gh release upload -R burrito-elixir/erlang-builder OTP-${{ github.event.inputs.version }} ./${{ steps.release-name.outputs.name }}_musl_libc.tar.gz
+      name: Upload asset
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      if: ${{ steps.asset-exists.outputs.exists == 'false' }}
+
   build:
     needs: [ensure_release]
     runs-on: ${{ matrix.os }}
@@ -68,9 +106,6 @@ jobs:
 
     - run: TMPDIR=$PWD/tmp ./scripts/build_otp.sh ${{ github.event.inputs.version }}
       if: ${{ steps.asset-exists.outputs.exists == 'false' }}
-
-    # - run: mkdir -p tmp/beamup && cd tmp/beamup && mkdir -p ${{ steps.release-name.outputs.name }} && tar czf ${{ steps.release-name.outputs.name }}.tar.gz ${{ steps.release-name.outputs.name }}
-    #   if: ${{ steps.asset-exists.outputs.exists == 'false' }}
 
     - run: gh release upload -R burrito-elixir/erlang-builder OTP-${{ github.event.inputs.version }} tmp/beamup/${{ steps.release-name.outputs.name }}.tar.gz
       name: Upload asset
