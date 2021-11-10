@@ -107,7 +107,7 @@ jobs:
     - run: APPLE_SILICON=1 TMPDIR=$PWD/tmp ./scripts/build_otp.sh ${{ github.event.inputs.version }}
       if: ${{ steps.asset-exists.outputs.exists == 'false' }}
 
-    - run: gh release upload -R burrito-elixir/erlang-builder OTP-${{ github.event.inputs.version }} ./${{ steps.release-name.outputs.name }}.tar.gz
+    - run: gh release upload -R burrito-elixir/erlang-builder OTP-${{ github.event.inputs.version }} tmp/beamup/${{ steps.release-name.outputs.name }}.tar.gz
       name: Upload asset
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

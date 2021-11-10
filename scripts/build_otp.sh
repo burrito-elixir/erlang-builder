@@ -100,5 +100,3 @@ make release -j$(getconf _NPROCESSORS_ONLN) 1>&2
 cd $TMPDIR
 echo "creating ${TMPDIR}/${release}.tar.gz"
 tar czf ${release}.tar.gz ${release}
-ls -lah ./
-ls -lah ${TMPDIR}
