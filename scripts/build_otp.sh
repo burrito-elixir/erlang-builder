@@ -78,7 +78,8 @@ if [ ! -d otp_src_${version} ]; then
 
     # set cross comp flags and compiler target flags
     export CC="$CC -target arm64-apple-macos11"
-    export OTP_BUILD_FLAGS="$OTP_BUILD_FLAGS --host=arm64-apple-darwin --build=x86_64-apple-darwin"
+    export CXX="$clang++ -target arm64-apple-macos11"
+    export OTP_BUILD_FLAGS="$OTP_BUILD_FLAGS --host=aarch64-apple-darwin --build=x86_64-apple-darwin"
     export arch="darwin-arm64"
     export erl_xcomp_sysroot="$OpenSSL_DIR"
   fi
