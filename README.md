@@ -1,3 +1,5 @@
+# THIS REPO IS NO LONGER USED. NEW SCRIPTS CAN BE FOUND HERE: https://github.com/doawoo/beam-machine
+
 ## beamup
 
 This is forked from [wojtekmach/beamup](https://github.com/wojtekmach/beamup) -- we had to re-push it ourselves becauase GitHub actions don't work very well with forked repos.
